@@ -1,0 +1,20 @@
+{
+  "name": "goodreads-on-amazon-webscraper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "scraper.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marcodallagatta/goodreads-on-amazon-webscraper.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/marcodallagatta/goodreads-on-amazon-webscraper/issues"
+  },
+  "homepage": "https://github.com/marcodallagatta/goodreads-on-amazon-webscraper#readme"
+}
