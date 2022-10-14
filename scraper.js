@@ -72,7 +72,10 @@ console.clear();
   // end of goodreads fetch
 
   // start of amazon checkout
-  const amazon = await puppeteer.launch({ headless: false });
+  const amazon = await puppeteer.launch({
+    headless: false,
+    args: ["--start-maximized"],
+  });
   const amazPpage = await amazon.newPage();
   amazPpage.setDefaultNavigationTimeout(0);
   await amazPpage.goto("https://www.amazon.com");
