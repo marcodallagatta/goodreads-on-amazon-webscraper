@@ -6,9 +6,11 @@ console.clear();
 (async () => {
   const goodreads = await puppeteer.launch();
   const grPage = await goodreads.newPage();
-  await grPage.goto("https://www.goodreads.com/choiceawards/best-books-2020");
+  grPage.setDefaultNavigationTimeout(0);
 
   console.log("Looking up available book categories...");
+
+  await grPage.goto("https://www.goodreads.com/choiceawards/best-books-2020");
 
   const categoriesList = ".category";
   await grPage.waitForSelector(categoriesList);
@@ -18,12 +20,12 @@ console.clear();
     const titles = document.querySelectorAll(`${categoriesList} h4`);
     const urls = document.querySelectorAll(`${categoriesList} > a`);
     const catsArr = [];
-    titles.forEach((cat, index) => {
+    for (let i = 0; i < titles.length; i++) {
       catsArr.push({
-        title: cat.innerText,
-        url: urls[index].href,
+        title: titles[i].innerText,
+        url: urls[i].href,
       });
-    });
+    }
     return catsArr;
   }, categoriesList);
 
@@ -72,6 +74,7 @@ console.clear();
   // start of amazon checkout
   const amazon = await puppeteer.launch({ headless: false });
   const amazPpage = await amazon.newPage();
+  amazPpage.setDefaultNavigationTimeout(0);
   await amazPpage.goto("https://www.amazon.com");
 
   // Type book into search box and clicks search button
