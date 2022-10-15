@@ -16,23 +16,31 @@ interface catsArr {
 
     console.log('Looking up available book categories...');
 
-    await grPage.goto('https://www.goodreads.com/choiceawards/best-books-2020');
+    try {
+        await grPage.goto('https://www.goodreads.com/choiceawards/best-books-2020');
+    } catch (err) {
+        console.error('An error occurred loading the page!\n', err);
+    }
 
     const categoriesList = '.category';
     await grPage.waitForSelector(categoriesList);
 
     // Extract the results from the page into an array of objects
     const categories = await grPage.evaluate((categoriesList: string) => {
-        const titles = document.querySelectorAll<HTMLElement>(`${categoriesList} h4`);
-        const urls = document.querySelectorAll<HTMLAnchorElement>(`${categoriesList} > a`);
-        const catsArr: catsArr[] = [];
-        for (let i = 0; i < titles.length; i++) {
-            catsArr.push({
-                title: titles[i].innerText,
-                url: urls[i].href,
-            });
+        try {
+            const titles = document.querySelectorAll<HTMLElement>(`${categoriesList} h4`);
+            const urls = document.querySelectorAll<HTMLAnchorElement>(`${categoriesList} > a`);
+            const catsArr: catsArr[] = [];
+            for (let i = 0; i < titles.length; i++) {
+                catsArr.push({
+                    title: titles[i].innerText,
+                    url: urls[i].href,
+                });
+            }
+            return catsArr;
+        } catch (err) {
+            console.error('An error occured scraping the page!\n', err);
         }
-        return catsArr;
     }, categoriesList);
 
     let catList = '';
@@ -57,16 +65,24 @@ interface catsArr {
         });
     }
     const selectedCat = await askUserForCat();
-    await grPage.goto(categories[selectedCat].url);
+    try {
+        await grPage.goto(categories[selectedCat].url);
+    } catch (err) {
+        console.error('An error occurred loading the page!\n', err);
+    }
 
     const booksList = '.pollAnswer';
     await grPage.waitForSelector(booksList);
 
     // Choose a random book between the books present in a category
     const randomBook = await grPage.evaluate((booksList: string) => {
-        const books = Array.from(document.querySelectorAll<HTMLImageElement>(`${booksList} > .answerWrapper img`));
-        const numOfBooks = books.length;
-        return books[Math.floor(Math.random() * numOfBooks)].alt;
+        try {
+            const books = Array.from(document.querySelectorAll<HTMLImageElement>(`${booksList} > .answerWrapper img`));
+            const numOfBooks = books.length;
+            return books[Math.floor(Math.random() * numOfBooks)].alt;
+        } catch (err) {
+            console.error('An error occured scraping the page!\n', err);
+        }
     }, booksList);
 
     console.log(`The book that was choosen for you is: ${randomBook}`);
@@ -82,7 +98,11 @@ interface catsArr {
     });
     const amazPpage = await amazon.newPage();
     amazPpage.setDefaultNavigationTimeout(0);
-    await amazPpage.goto('https://www.amazon.com');
+    try {
+        await amazPpage.goto('https://www.amazon.com');
+    } catch (err) {
+        console.error('An error occurred loading the page!\n', err);
+    }
 
     // Type book into search box and clicks search button
     const searchField = '.nav-search-field input';
@@ -102,7 +122,11 @@ interface catsArr {
         });
         return paperbackIndex[0].href;
     }, searchResults);
-    await amazPpage.goto(findPaperback);
+    try {
+        await amazPpage.goto(findPaperback);
+    } catch (err) {
+        console.error('An error occurred loading the page!\n', err);
+    }
 
     // Wait for the product page to load and add to cart
     const addToCart = '#add-to-cart-button';

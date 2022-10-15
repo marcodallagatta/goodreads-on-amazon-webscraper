@@ -57,7 +57,7 @@ console.clear();
             });
         });
     }
-    var goodreads, grPage, categoriesList, categories, catList, selectedCat, booksList, randomBook, amazon, amazPpage, searchField, searchResults, findPaperback, addToCart, checkout;
+    var goodreads, grPage, err_1, categoriesList, categories, catList, selectedCat, err_2, booksList, randomBook, amazon, amazPpage, err_3, searchField, searchResults, findPaperback, err_4, addToCart, checkout;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, puppeteer.launch()];
@@ -68,79 +68,116 @@ console.clear();
                 grPage = _a.sent();
                 grPage.setDefaultNavigationTimeout(0);
                 console.log('Looking up available book categories...');
-                return [4 /*yield*/, grPage.goto('https://www.goodreads.com/choiceawards/best-books-2020')];
+                _a.label = 3;
             case 3:
-                _a.sent();
-                categoriesList = '.category';
-                return [4 /*yield*/, grPage.waitForSelector(categoriesList)];
+                _a.trys.push([3, 5, , 6]);
+                return [4 /*yield*/, grPage.goto('https://www.goodreads.com/choiceawards/best-books-2020')];
             case 4:
                 _a.sent();
-                return [4 /*yield*/, grPage.evaluate(function (categoriesList) {
-                        var titles = document.querySelectorAll("".concat(categoriesList, " h4"));
-                        var urls = document.querySelectorAll("".concat(categoriesList, " > a"));
-                        var catsArr = [];
-                        for (var i = 0; i < titles.length; i++) {
-                            catsArr.push({
-                                title: titles[i].innerText,
-                                url: urls[i].href
-                            });
-                        }
-                        return catsArr;
-                    }, categoriesList)];
+                return [3 /*break*/, 6];
             case 5:
+                err_1 = _a.sent();
+                console.error('An error occurred loading the page!\n', err_1);
+                return [3 /*break*/, 6];
+            case 6:
+                categoriesList = '.category';
+                return [4 /*yield*/, grPage.waitForSelector(categoriesList)];
+            case 7:
+                _a.sent();
+                return [4 /*yield*/, grPage.evaluate(function (categoriesList) {
+                        try {
+                            var titles = document.querySelectorAll("".concat(categoriesList, " h4"));
+                            var urls = document.querySelectorAll("".concat(categoriesList, " > a"));
+                            var catsArr = [];
+                            for (var i = 0; i < titles.length; i++) {
+                                catsArr.push({
+                                    title: titles[i].innerText,
+                                    url: urls[i].href
+                                });
+                            }
+                            return catsArr;
+                        }
+                        catch (err) {
+                            console.error('An error occured scraping the page!\n', err);
+                        }
+                    }, categoriesList)];
+            case 8:
                 categories = _a.sent();
                 catList = '';
                 categories.forEach(function (elem, index) {
                     catList += "".concat(index, ". ").concat(elem.title, "\n");
                 });
                 return [4 /*yield*/, askUserForCat()];
-            case 6:
+            case 9:
                 selectedCat = _a.sent();
+                _a.label = 10;
+            case 10:
+                _a.trys.push([10, 12, , 13]);
                 return [4 /*yield*/, grPage.goto(categories[selectedCat].url)];
-            case 7:
+            case 11:
                 _a.sent();
+                return [3 /*break*/, 13];
+            case 12:
+                err_2 = _a.sent();
+                console.error('An error occurred loading the page!\n', err_2);
+                return [3 /*break*/, 13];
+            case 13:
                 booksList = '.pollAnswer';
                 return [4 /*yield*/, grPage.waitForSelector(booksList)];
-            case 8:
+            case 14:
                 _a.sent();
                 return [4 /*yield*/, grPage.evaluate(function (booksList) {
-                        var books = Array.from(document.querySelectorAll("".concat(booksList, " > .answerWrapper img")));
-                        var numOfBooks = books.length;
-                        return books[Math.floor(Math.random() * numOfBooks)].alt;
+                        try {
+                            var books = Array.from(document.querySelectorAll("".concat(booksList, " > .answerWrapper img")));
+                            var numOfBooks = books.length;
+                            return books[Math.floor(Math.random() * numOfBooks)].alt;
+                        }
+                        catch (err) {
+                            console.error('An error occured scraping the page!\n', err);
+                        }
                     }, booksList)];
-            case 9:
+            case 15:
                 randomBook = _a.sent();
                 console.log("The book that was choosen for you is: ".concat(randomBook));
                 console.log("Now adding the book to your Amazon shopping cart...");
                 return [4 /*yield*/, goodreads.close()];
-            case 10:
+            case 16:
                 _a.sent();
                 return [4 /*yield*/, puppeteer.launch({
                         headless: false,
                         args: ['--start-maximized']
                     })];
-            case 11:
+            case 17:
                 amazon = _a.sent();
                 return [4 /*yield*/, amazon.newPage()];
-            case 12:
+            case 18:
                 amazPpage = _a.sent();
                 amazPpage.setDefaultNavigationTimeout(0);
+                _a.label = 19;
+            case 19:
+                _a.trys.push([19, 21, , 22]);
                 return [4 /*yield*/, amazPpage.goto('https://www.amazon.com')];
-            case 13:
+            case 20:
                 _a.sent();
+                return [3 /*break*/, 22];
+            case 21:
+                err_3 = _a.sent();
+                console.error('An error occurred loading the page!\n', err_3);
+                return [3 /*break*/, 22];
+            case 22:
                 searchField = '.nav-search-field input';
                 return [4 /*yield*/, amazPpage.waitForSelector(searchField)];
-            case 14:
+            case 23:
                 _a.sent();
                 return [4 /*yield*/, amazPpage.type(searchField, "".concat(randomBook, " paperback"))];
-            case 15:
+            case 24:
                 _a.sent();
                 return [4 /*yield*/, amazPpage.click('.nav-search-submit')];
-            case 16:
+            case 25:
                 _a.sent();
                 searchResults = 'div[data-cel-widget="search_result_1"] .a-link-normal';
                 return [4 /*yield*/, amazPpage.waitForSelector(searchResults)];
-            case 17:
+            case 26:
                 _a.sent();
                 return [4 /*yield*/, amazPpage.evaluate(function (searchResults) {
                         var links = document.querySelectorAll(searchResults);
@@ -150,24 +187,33 @@ console.clear();
                         });
                         return paperbackIndex[0].href;
                     }, searchResults)];
-            case 18:
+            case 27:
                 findPaperback = _a.sent();
+                _a.label = 28;
+            case 28:
+                _a.trys.push([28, 30, , 31]);
                 return [4 /*yield*/, amazPpage.goto(findPaperback)];
-            case 19:
+            case 29:
                 _a.sent();
+                return [3 /*break*/, 31];
+            case 30:
+                err_4 = _a.sent();
+                console.error('An error occurred loading the page!\n', err_4);
+                return [3 /*break*/, 31];
+            case 31:
                 addToCart = '#add-to-cart-button';
                 return [4 /*yield*/, amazPpage.waitForSelector(addToCart)];
-            case 20:
+            case 32:
                 _a.sent();
                 return [4 /*yield*/, amazPpage.click(addToCart)];
-            case 21:
+            case 33:
                 _a.sent();
                 checkout = '#sc-buy-box-ptc-button';
                 return [4 /*yield*/, amazPpage.waitForSelector(checkout)];
-            case 22:
+            case 34:
                 _a.sent();
                 return [4 /*yield*/, amazPpage.click(checkout)];
-            case 23:
+            case 35:
                 _a.sent();
                 return [2 /*return*/];
         }
