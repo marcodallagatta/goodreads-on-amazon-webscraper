@@ -1,7 +1,5 @@
 {
     "printWidth": 120,
-    "arrowParens": "always",
     "singleQuote": true,
-    "tabWidth": 4,
-    "proseWrap": "never"
+    "tabWidth": 2
 }
