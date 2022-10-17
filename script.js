@@ -51,6 +51,7 @@ console.clear();
                 return [2 /*return*/, new Promise(function (resolve) {
                         ask.question("Which category would you like a suggestion for? Please input the number for the desidered category:\n".concat(catList, "=> "), function (answer) {
                             ask.close();
+                            console.log("Now fetching a random book from ".concat(categories[answer].title, ". Please wait..."));
                             resolve(answer);
                         });
                     })];
