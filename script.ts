@@ -95,7 +95,9 @@ interface catsArr {
   // start of amazon checkout
   const amazon = await puppeteer.launch({
     headless: false,
-    args: ['--start-maximized'],
+    ignoreHTTPSErrors: true,
+    defaultViewport: null,
+    args: [`--start-maximized`],
   });
   const amazPpage = await amazon.newPage();
   amazPpage.setDefaultNavigationTimeout(0);

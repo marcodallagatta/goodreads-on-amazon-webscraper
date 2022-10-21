@@ -146,7 +146,9 @@ console.clear();
                 _a.sent();
                 return [4 /*yield*/, puppeteer.launch({
                         headless: false,
-                        args: ['--start-maximized']
+                        ignoreHTTPSErrors: true,
+                        defaultViewport: null,
+                        args: ["--start-maximized"]
                     })];
             case 17:
                 amazon = _a.sent();
